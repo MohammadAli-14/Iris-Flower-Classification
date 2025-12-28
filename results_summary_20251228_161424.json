@@ -1,0 +1,25 @@
+{
+    "best_model": "SVM",
+    "best_accuracy": 0.9666666666666667,
+    "all_models_accuracy": {
+        "Logistic Regression": 0.9333333333333333,
+        "Decision Tree": 0.9333333333333333,
+        "Random Forest": 0.9,
+        "SVM": 0.9666666666666667,
+        "K-Nearest Neighbors": 0.9333333333333333,
+        "Gaussian Naive Bayes": 0.9666666666666667,
+        "Gradient Boosting": 0.9666666666666667
+    },
+    "timestamp": "20251228_161424",
+    "features": [
+        "sepal length (cm)",
+        "sepal width (cm)",
+        "petal length (cm)",
+        "petal width (cm)"
+    ],
+    "classes": [
+        "setosa",
+        "versicolor",
+        "virginica"
+    ]
+}

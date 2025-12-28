@@ -1,0 +1,15 @@
+# Core requirements (Python 3.13 compatible)
+flask>=3.0
+numpy>=2.1
+pandas>=2.2
+scikit-learn>=1.5
+scipy>=1.13
+joblib>=1.4
+
+# Optional (for additional functionality)
+python-dotenv>=1.0
+waitress>=2.1
+gunicorn>=22.0
+
+# For development/debugging
+werkzeug>=3.0
