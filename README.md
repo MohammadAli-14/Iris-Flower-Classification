@@ -5,8 +5,11 @@
 [![scikit-learn](https://img.shields.io/badge/scikit--learn-1.5+-orange.svg)](https://scikit-learn.org/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Docker](https://img.shields.io/badge/docker-ready-blue.svg)](https://www.docker.com/)
+[![Live Demo](https://img.shields.io/badge/demo-online-green.svg)](https://iris-flower-classification-lf63.onrender.com/)
 
-A production-ready web application and REST API that serves a trained Iris flower classifier. The model (SVM) achieves **96.7% accuracy** on the classic Iris dataset. The app features a polished web interface for single predictions and supports batch predictions via JSON API.
+A production-ready web application and REST API that serves a trained Iris flower classifier. The model (SVM) achieves **96.7% accuracy** on the classic Iris dataset.
+
+[**Explore the Live Demo »**](https://iris-flower-classification-lf63.onrender.com/)
 
 ![Web UI Screenshot](Iris.png)
 
