@@ -1,15 +1,15 @@
 ```markdown
 # Iris Flower Classification 🌸
 
-[![Python 3.13](https://img.shields.io/badge/python-3.13-blue.svg)](https://www.python.org/downloads/release/python-3130/)
+[![Python 3.13](https://img.shields.io/badge/python-3.13-blue.svg)](https://www.python.org/downloads/)
 [![Flask](https://img.shields.io/badge/flask-3.0+-green.svg)](https://flask.palletsprojects.com/)
 [![scikit-learn](https://img.shields.io/badge/scikit--learn-1.5+-orange.svg)](https://scikit-learn.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: MIT](https://img.shields.io/badge/license-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Docker](https://img.shields.io/badge/docker-ready-blue.svg)](https://www.docker.com/)
 
 A production-ready web application and REST API that serves a trained Iris flower classifier. The model (SVM) achieves **96.7% accuracy** on the classic Iris dataset. The app features a polished web interface for single predictions and supports batch predictions via JSON API.
 
-![Web UI Screenshot](screenshot.png) <!-- Add a screenshot if available -->
+![Web UI Screenshot](https://via.placeholder.com/800x400?text=Iris+Classification+UI) <!-- Replace with actual screenshot -->
 
 ## Features ✨
 
@@ -24,15 +24,15 @@ A production-ready web application and REST API that serves a trained Iris flowe
 
 ```
 .
-├── app.py                         # Flask application with routes and prediction logic
-├── dockerfile                      # Docker configuration (update base image to Python 3.12+)
-├── requirements.txt                # Python dependencies
+├── app.py                          # Flask application with routes and prediction logic
+├── dockerfile                       # Docker configuration (update base image to Python 3.12+)
+├── requirements.txt                 # Python dependencies
 ├── iris-flower-classification.ipynb # Jupyter notebook for model training
-├── Procfile                        # For Heroku deployment (Gunicorn)
-├── README.md                       # This file
+├── Procfile                         # For Heroku deployment (Gunicorn)
+├── README.md                        # This file
 ├── templates/
-│   └── index.html                  # Web UI template
-└── model_artifacts/                 # (Generated files – placed in root for simplicity)
+│   └── index.html                   # Web UI template
+└── model_artifacts/                  # (Generated files – placed in root for simplicity)
     ├── iris_classification_model_20251228_161424.pkl
     ├── scaler_20251228_161424.pkl
     ├── label_encoder_20251228_161424.pkl
