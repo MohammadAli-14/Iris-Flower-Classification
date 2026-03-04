@@ -11,7 +11,7 @@ A production-ready web application and REST API that serves a trained Iris flowe
 
 [**Explore the Live Demo »**](https://iris-flower-classification-lf63.onrender.com/)
 
-![Web UI Screenshot](Iris.png)
+![Web UI Screenshot](IRIS1.png)
 
 ## Features ✨
 

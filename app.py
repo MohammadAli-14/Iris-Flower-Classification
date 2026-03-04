@@ -42,12 +42,29 @@ def home():
 def predict():
     """API endpoint for making predictions"""
     try:
+        if not (model and scaler and label_encoder):
+            return jsonify({'error': 'Model not loaded'}), 503
+
         # Get data from form or JSON
         if request.form:
-            data = [float(request.form[f'feature{i}']) 
-                   for i in range(len(FEATURE_NAMES))]
-        elif request.json:
-            data = request.json['features']
+            data = []
+            for i in range(len(FEATURE_NAMES)):
+                raw_value = request.form.get(f'feature{i}')
+                if raw_value is None:
+                    return jsonify({'error': f'Missing feature{i}'}), 400
+                try:
+                    data.append(float(raw_value))
+                except ValueError:
+                    return jsonify({'error': f'Invalid numeric value for feature{i}'}), 400
+        elif request.is_json:
+            payload = request.get_json(silent=True) or {}
+            data = payload.get('features')
+            if not isinstance(data, list):
+                return jsonify({'error': 'Features must be a list'}), 400
+            try:
+                data = [float(value) for value in data]
+            except (TypeError, ValueError):
+                return jsonify({'error': 'Features must be numeric'}), 400
         else:
             return jsonify({'error': 'No data provided'}), 400
         
@@ -86,7 +103,7 @@ def predict():
         }
         
         # Add probabilities if available
-        if prediction_proba:
+        if prediction_proba is not None:
             probabilities = dict(zip(CLASS_NAMES, prediction_proba))
             response['prediction']['probabilities'] = probabilities
             response['prediction']['confidence'] = max(prediction_proba)
@@ -127,8 +144,12 @@ def health_check():
 def batch_predict():
     """Predict multiple samples at once"""
     try:
-        if request.json and 'samples' in request.json:
-            samples = request.json['samples']
+        if not (model and scaler and label_encoder):
+            return jsonify({'error': 'Model not loaded'}), 503
+
+        if request.is_json:
+            payload = request.get_json(silent=True) or {}
+            samples = payload.get('samples')
             
             # Validate input
             if not isinstance(samples, list):
@@ -136,10 +157,16 @@ def batch_predict():
             
             predictions = []
             for i, sample in enumerate(samples):
+                if not isinstance(sample, list):
+                    return jsonify({'error': f'Sample {i}: Must be a list'}), 400
                 if len(sample) != len(FEATURE_NAMES):
                     return jsonify({
                         'error': f'Sample {i}: Expected {len(FEATURE_NAMES)} features, got {len(sample)}'
                     }), 400
+                try:
+                    sample = [float(value) for value in sample]
+                except (TypeError, ValueError):
+                    return jsonify({'error': f'Sample {i}: Features must be numeric'}), 400
                 
                 # Prepare and scale features
                 features = np.array(sample).reshape(1, -1)
@@ -182,4 +209,4 @@ if __name__ == '__main__':
     print("\nPress Ctrl+C to stop the server")
     
     # Run the app
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=False)
