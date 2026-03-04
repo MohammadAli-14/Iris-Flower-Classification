@@ -3,266 +3,468 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iris Flower Classification</title>
+    <title>Iris Predictor | Machine Learning Demo</title>
+    <!-- Add FontAwesome and Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #ec4899;
+            --bg-gradient: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            --glass-bg: rgba(255, 255, 255, 0.8);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
         }
         
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--bg-gradient);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
+            color: var(--text-main);
         }
         
         .container {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            box-shadow: var(--shadow);
             overflow: hidden;
-            max-width: 1000px;
+            max-width: 1100px;
             width: 100%;
+            display: flex;
+            flex-direction: column;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
-            padding: 30px;
+            padding: 40px 30px;
             text-align: center;
+            position: relative;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-top: 20px solid var(--primary-dark);
         }
         
         .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
+            font-size: 2.8rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+            letter-spacing: -1px;
         }
         
         .header p {
             opacity: 0.9;
             font-size: 1.1rem;
+            font-weight: 400;
+            max-width: 600px;
+            margin: 0 auto;
         }
         
         .content {
-            display: flex;
-            flex-wrap: wrap;
-            padding: 0;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            padding: 20px;
+            gap: 20px;
         }
         
         .form-section {
-            flex: 1;
-            min-width: 300px;
-            padding: 40px;
-            border-right: 1px solid #eee;
+            padding: 30px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
         }
         
         .results-section {
-            flex: 1;
-            min-width: 300px;
-            padding: 40px;
-            background: #f8f9fa;
+            padding: 30px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            position: relative;
         }
         
         h2 {
-            color: #333;
-            margin-bottom: 25px;
-            padding-bottom: 10px;
-            border-bottom: 3px solid #667eea;
-            font-size: 1.8rem;
+            color: var(--text-main);
+            margin-bottom: 30px;
+            font-size: 1.6rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h2 i {
+            color: var(--primary);
         }
         
         .input-group {
-            margin-bottom: 25px;
+            margin-bottom: 24px;
+            position: relative;
         }
         
+        .label-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
         label {
-            display: block;
-            margin-bottom: 8px;
-            color: #555;
+            font-size: 0.95rem;
+            color: var(--text-main);
             font-weight: 600;
         }
         
+        .info-icon {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            cursor: help;
+        }
+
         input[type="number"] {
             width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #ddd;
-            border-radius: 10px;
+            padding: 12px 16px;
+            border: 2px solid #f1f5f9;
+            border-radius: 12px;
             font-size: 1rem;
-            transition: border-color 0.3s;
+            background: #f8fafc;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: var(--primary);
         }
         
         input[type="number"]:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: var(--primary);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
         }
         
         .slider-container {
-            margin-top: 5px;
+            margin-top: 12px;
         }
         
         .slider {
+            -webkit-appearance: none;
             width: 100%;
-            margin: 10px 0;
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 5px;
+            outline: none;
+        }
+        
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: var(--primary);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 3px solid white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            background: var(--primary-dark);
         }
         
         .value-display {
-            text-align: center;
-            font-weight: bold;
-            color: #667eea;
-            margin-top: 5px;
+            display: none; /* We'll use the number input for display */
         }
         
         .buttons {
-            display: flex;
-            gap: 15px;
-            margin-top: 30px;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 12px;
+            margin-top: 32px;
         }
         
         button {
-            flex: 1;
-            padding: 15px;
+            padding: 16px;
             border: none;
-            border-radius: 10px;
-            font-size: 1.1rem;
-            font-weight: 600;
+            border-radius: 14px;
+            font-size: 1rem;
+            font-weight: 700;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
         
         .predict-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--primary);
             color: white;
+            box-shadow: 0 4px 14px 0 rgba(99, 102, 241, 0.39);
+        }
+        
+        .predict-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.23);
         }
         
         .reset-btn {
-            background: #f1f3f5;
-            color: #333;
+            background: #f1f5f9;
+            color: var(--text-muted);
+        }
+
+        .reset-btn:hover {
+            background: #e2e8f0;
+            color: var(--text-main);
         }
         
         .result-card {
-            background: white;
-            border-radius: 15px;
+            background: #f8fafc;
+            border-radius: 20px;
             padding: 30px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 24px;
+            border: 2px solid #f1f5f9;
+            transition: all 0.5s ease;
         }
         
         .prediction {
-            font-size: 2.5rem;
-            font-weight: bold;
-            margin: 20px 0;
-            padding: 20px;
-            border-radius: 10px;
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin: 15px 0;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             text-transform: capitalize;
+            animation: scaleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
         }
         
-        .confidence {
-            font-size: 1.2rem;
-            color: #28a745;
-            margin-top: 10px;
+        .confidence-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #dcfce7;
+            color: #166534;
+            padding: 6px 16px;
+            border-radius: 100px;
+            font-weight: 700;
+            font-size: 0.9rem;
         }
         
-        .feature-values {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
         }
         
-        .feature-values h4 {
-            margin-bottom: 15px;
-            color: #333;
+        .feature-item-small {
+            background: #f8fafc;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid #f1f5f9;
+        }
+
+        .feature-item-small span:first-child {
+            display: block;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .feature-item-small span:last-child {
+            font-weight: 700;
+            color: var(--text-main);
         }
         
-        .feature-item {
+        .prob-container {
+            margin-top: auto;
+        }
+
+        .prob-item {
+            margin-bottom: 16px;
+        }
+
+        .prob-header {
             display: flex;
             justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .feature-item:last-child {
-            border-bottom: none;
-        }
-        
-        .probabilities {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 8px;
         }
         
         .prob-bar {
-            height: 25px;
-            background: #e9ecef;
-            border-radius: 5px;
-            margin: 10px 0;
+            height: 10px;
+            background: #f1f5f9;
+            border-radius: 10px;
             overflow: hidden;
         }
         
         .prob-fill {
             height: 100%;
-            background: linear-gradient(90deg, #667eea, #764ba2);
-            transition: width 1s ease-in-out;
+            background: var(--primary);
+            border-radius: 10px;
+            transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* Species Images */
+        .species-img {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 15px;
+            border-radius: 50%;
+            border: 4px solid #f1f5f9;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
             display: flex;
+            justify-content: center;
             align-items: center;
-            justify-content: flex-end;
-            padding-right: 10px;
-            color: white;
-            font-weight: bold;
+            transition: border-color 0.5s ease;
+        }
+
+        /* Loading Spinner */
+        .loader-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255,255,255,0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            border-radius: 20px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .loader-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
         
         .hidden {
-            display: none;
+            display: none !important;
         }
         
         .sample-buttons {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 10px;
-            margin-top: 20px;
+            margin-top: 24px;
         }
         
         .sample-btn {
-            padding: 10px;
-            background: #f1f3f5;
-            border: none;
-            border-radius: 5px;
+            padding: 12px;
+            background: #f8fafc;
+            border: 1px solid #f1f5f9;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            color: var(--text-main);
+            font-weight: 600;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: all 0.2s;
         }
         
         .sample-btn:hover {
-            background: #e9ecef;
+            background: white;
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateY(-1px);
         }
-        
+
         .footer {
+            padding: 24px;
             text-align: center;
-            padding: 20px;
-            color: #666;
-            font-size: 0.9rem;
-            border-top: 1px solid #eee;
+            border-top: 1px solid #f1f5f9;
+            background: rgba(248, 250, 252, 0.5);
+        }
+
+        .footer p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .footer .tech-stack {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 10px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .tech-stack span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .tech-stack i {
+            color: var(--primary);
         }
         
-        @media (max-width: 768px) {
+        @media (max-width: 900px) {
             .content {
-                flex-direction: column;
+                grid-template-columns: 1fr;
             }
             
-            .form-section {
-                border-right: none;
-                border-bottom: 1px solid #eee;
+            .header h1 {
+                font-size: 2.2rem;
             }
         }
     </style>
@@ -270,76 +472,122 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🌺 Iris Flower Classification</h1>
-            <p>Predict iris flower species based on sepal and petal measurements</p>
+            <h1><i class="fas fa-seedling"></i> Iris Predictor</h1>
+            <p>Experience the power of machine learning with our interactive species classification engine.</p>
         </div>
         
         <div class="content">
             <div class="form-section">
-                <h2>Input Features</h2>
+                <h2><i class="fas fa-sliders"></i> Adjust Features</h2>
                 <form id="predictionForm">
                     <div id="inputFields">
                         <!-- Input fields will be generated here -->
                     </div>
                     
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin: 20px 0 10px;">Quick Load Samples:</p>
                     <div class="sample-buttons">
-                        <button type="button" class="sample-btn" onclick="loadSample('setosa')">Setosa Sample</button>
-                        <button type="button" class="sample-btn" onclick="loadSample('versicolor')">Versicolor Sample</button>
-                        <button type="button" class="sample-btn" onclick="loadSample('virginica')">Virginica Sample</button>
-                        <button type="button" class="sample-btn" onclick="loadSample('mixed')">Mixed Sample</button>
+                        <button type="button" class="sample-btn" onclick="loadSample('setosa')">
+                            <i class="fas fa-leaf" style="color: #10b981"></i> Setosa
+                        </button>
+                        <button type="button" class="sample-btn" onclick="loadSample('versicolor')">
+                            <i class="fas fa-leaf" style="color: #3b82f6"></i> Versicolor
+                        </button>
+                        <button type="button" class="sample-btn" onclick="loadSample('virginica')">
+                            <i class="fas fa-leaf" style="color: #8b5cf6"></i> Virginica
+                        </button>
+                        <button type="button" class="sample-btn" onclick="loadSample('mixed')">
+                            <i class="fas fa-random" style="color: #f59e0b"></i> Random
+                        </button>
                     </div>
                     
                     <div class="buttons">
-                        <button type="submit" class="predict-btn">Predict Species</button>
-                        <button type="button" class="reset-btn" onclick="resetForm()">Reset</button>
+                        <button type="submit" class="predict-btn">
+                            <i class="fas fa-brain"></i> Analyze Now
+                        </button>
+                        <button type="button" class="reset-btn" onclick="resetForm()">
+                            <i class="fas fa-undo"></i>
+                        </button>
                     </div>
                 </form>
             </div>
             
             <div class="results-section">
-                <h2>Prediction Results</h2>
+                <div id="loader" class="loader-overlay">
+                    <div class="spinner"></div>
+                    <p style="margin-top: 15px; font-weight: 700; color: var(--primary);">Analyzing Data...</p>
+                </div>
+
+                <h2><i class="fas fa-chart-pie"></i> Analysis Result</h2>
+                
                 <div id="results" class="hidden">
                     <div class="result-card">
-                        <h3>Predicted Species</h3>
+                        <div id="speciesIconContainer" class="species-img">
+                            <i id="speciesIcon" class="fas fa-question-circle" style="font-size: 48px; color: #cbd5e1;"></i>
+                        </div>
+                        <p style="color: var(--text-muted); font-size: 0.85rem; font-weight: 600;">Prediction</p>
                         <div id="predictionResult" class="prediction">Loading...</div>
-                        <div id="confidence" class="confidence"></div>
+                        <div id="confidence" class="confidence-badge">
+                            <i class="fas fa-check-circle"></i>
+                            <span>--%</span>
+                        </div>
                     </div>
                     
-                    <div class="feature-values">
-                        <h4>Input Features</h4>
-                        <div id="featureValues"></div>
+                    <div class="feature-grid" id="featureValues">
+                        <!-- Features will be injected here -->
                     </div>
                     
-                    <div class="probabilities">
-                        <h4>Class Probabilities</h4>
+                    <div class="prob-container" id="probContainer">
+                        <p style="font-weight: 700; margin-bottom: 15px; font-size: 0.9rem;">Probability Distribution</p>
                         <div id="probabilityBars"></div>
                     </div>
                 </div>
                 
-                <div id="noResults">
-                    <p style="text-align: center; color: #666; padding: 40px;">
-                        Enter feature values and click "Predict Species" to see results
+                <div id="noResults" style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+                    <div style="background: #f1f5f9; width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
+                        <i class="fas fa-microscope" style="font-size: 2rem; color: var(--text-muted);"></i>
+                    </div>
+                    <p style="color: var(--text-muted); font-weight: 600; max-width: 250px;">
+                        Adjust the sliders and click "Analyze Now" to see the prediction results.
                     </p>
                 </div>
             </div>
         </div>
         
         <div class="footer">
-            <p>Model: SVM | Accuracy: 96.67% | Features: Sepal Length, Sepal Width, Petal Length, Petal Width</p>
-            <p>© 2024 Iris Classification System</p>
+            <div class="tech-stack">
+                <span><i class="fab fa-python"></i> Python 3.13</span>
+                <span><i class="fas fa-flask"></i> Flask</span>
+                <span><i class="fas fa-robot"></i> Scikit-Learn</span>
+                <span><i class="fab fa-docker"></i> Docker</span>
+            </div>
+            <p style="margin-top: 15px;">© 2024 Advanced Iris Classification System | Production Grade ML</p>
         </div>
     </div>
 
     <script>
         // Feature configurations
         const features = [
-            { name: 'sepal length (cm)', min: 4.0, max: 8.0, step: 0.1, value: 5.8 },
-            { name: 'sepal width (cm)', min: 2.0, max: 4.5, step: 0.1, value: 3.0 },
-            { name: 'petal length (cm)', min: 1.0, max: 7.0, step: 0.1, value: 4.0 },
-            { name: 'petal width (cm)', min: 0.1, max: 2.5, step: 0.1, value: 1.2 }
+            { name: 'Sepal Length', key: 'sepal length (cm)', min: 4.0, max: 8.0, step: 0.1, value: 5.8 },
+            { name: 'Sepal Width', key: 'sepal width (cm)', min: 2.0, max: 4.5, step: 0.1, value: 3.0 },
+            { name: 'Petal Length', key: 'petal length (cm)', min: 1.0, max: 7.0, step: 0.1, value: 4.0 },
+            { name: 'Petal Width', key: 'petal width (cm)', min: 0.1, max: 2.5, step: 0.1, value: 1.2 }
         ];
 
-        // Sample data
+        const speciesMeta = {
+            setosa: {
+                icon: 'fa-leaf',
+                color: '#10b981'
+            },
+            versicolor: {
+                icon: 'fa-fan',
+                color: '#3b82f6'
+            },
+            virginica: {
+                icon: 'fa-clover',
+                color: '#8b5cf6'
+            }
+        };
+
         const samples = {
             setosa: [5.1, 3.5, 1.4, 0.2],
             versicolor: [6.0, 2.9, 4.5, 1.5],
@@ -347,7 +595,6 @@
             mixed: [5.8, 2.7, 5.1, 1.9]
         };
 
-        // Initialize input fields
         function initializeInputs() {
             const container = document.getElementById('inputFields');
             container.innerHTML = '';
@@ -356,7 +603,10 @@
                 const div = document.createElement('div');
                 div.className = 'input-group';
                 div.innerHTML = `
-                    <label for="feature${index}">${feature.name}</label>
+                    <div class="label-wrapper">
+                        <label for="feature${index}">${feature.name}</label>
+                        <i class="fas fa-info-circle info-icon" title="${feature.key}"></i>
+                    </div>
                     <input type="number" 
                            id="feature${index}" 
                            name="feature${index}"
@@ -364,159 +614,138 @@
                            max="${feature.max}"
                            step="${feature.step}"
                            value="${feature.value}"
-                           required>
+                           required
+                           oninput="updateSlider(${index}, this.value)">
                     <div class="slider-container">
                         <input type="range" 
                                class="slider"
+                               id="slider${index}"
                                min="${feature.min}"
                                max="${feature.max}"
                                step="${feature.step}"
                                value="${feature.value}"
                                oninput="updateNumberInput(${index}, this.value)">
-                        <div class="value-display" id="value${index}">${feature.value}</div>
                     </div>
                 `;
                 container.appendChild(div);
             });
         }
 
-        // Update number input when slider changes
         function updateNumberInput(index, value) {
-            const input = document.getElementById(`feature${index}`);
-            const display = document.getElementById(`value${index}`);
-            input.value = value;
-            display.textContent = value;
+            document.getElementById(`feature${index}`).value = value;
         }
 
-        // Load sample data
+        function updateSlider(index, value) {
+            document.getElementById(`slider${index}`).value = value;
+        }
+
         function loadSample(type) {
             const sample = samples[type];
-            features.forEach((feature, index) => {
-                const input = document.getElementById(`feature${index}`);
-                const slider = input.parentElement.querySelector('.slider');
-                const display = document.getElementById(`value${index}`);
-                
-                input.value = sample[index];
-                slider.value = sample[index];
-                display.textContent = sample[index];
+            features.forEach((_, index) => {
+                document.getElementById(`feature${index}`).value = sample[index];
+                document.getElementById(`slider${index}`).value = sample[index];
             });
-            
-            // Auto-predict after loading sample
-            setTimeout(predict, 500);
+            predict();
         }
 
-        // Reset form
         function resetForm() {
             features.forEach((feature, index) => {
-                const input = document.getElementById(`feature${index}`);
-                const slider = input.parentElement.querySelector('.slider');
-                const display = document.getElementById(`value${index}`);
-                
-                input.value = feature.value;
-                slider.value = feature.value;
-                display.textContent = feature.value;
+                document.getElementById(`feature${index}`).value = feature.value;
+                document.getElementById(`slider${index}`).value = feature.value;
             });
-            
             document.getElementById('results').classList.add('hidden');
             document.getElementById('noResults').classList.remove('hidden');
         }
 
-        // Handle form submission
-        document.getElementById('predictionForm').addEventListener('submit', async function(e) {
+        document.getElementById('predictionForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            await predict();
+            predict();
         });
 
-        // Make prediction
         async function predict() {
-            // Get input values
-            const inputs = [];
-            features.forEach((_, index) => {
-                const input = document.getElementById(`feature${index}`);
-                inputs.push(parseFloat(input.value));
-            });
-
-            // Show loading
-            document.getElementById('predictionResult').textContent = 'Predicting...';
-            document.getElementById('results').classList.remove('hidden');
-            document.getElementById('noResults').classList.add('hidden');
+            const loader = document.getElementById('loader');
+            const results = document.getElementById('results');
+            const noResults = document.getElementById('noResults');
+            
+            loader.classList.add('active');
+            
+            const inputs = features.map((_, i) => parseFloat(document.getElementById(`feature${i}`).value));
 
             try {
-                // Make API request
                 const response = await fetch('/predict', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: new URLSearchParams(
-                        inputs.map((value, index) => [`feature${index}`, value])
-                    )
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams(inputs.map((v, i) => [`feature${i}`, v]))
                 });
 
                 const data = await response.json();
 
                 if (data.success) {
-                    // Update prediction
-                    const prediction = data.prediction.class;
-                    document.getElementById('predictionResult').textContent = prediction;
-                    
-                    // Update confidence
-                    if (data.prediction.confidence) {
-                        const confidence = (data.prediction.confidence * 100).toFixed(1);
-                        document.getElementById('confidence').textContent = `Confidence: ${confidence}%`;
-                    }
-                    
-                    // Update feature values
-                    const featureValuesDiv = document.getElementById('featureValues');
-                    featureValuesDiv.innerHTML = '';
-                    
-                    features.forEach((feature, index) => {
-                        const valueDiv = document.createElement('div');
-                        valueDiv.className = 'feature-item';
-                        valueDiv.innerHTML = `
-                            <span>${feature.name}</span>
-                            <span><strong>${inputs[index]}</strong></span>
-                        `;
-                        featureValuesDiv.appendChild(valueDiv);
-                    });
-                    
-                    // Update probability bars
-                    if (data.prediction.probabilities) {
-                        const probBarsDiv = document.getElementById('probabilityBars');
-                        probBarsDiv.innerHTML = '';
+                    setTimeout(() => {
+                        loader.classList.remove('active');
+                        results.classList.remove('hidden');
+                        noResults.classList.add('hidden');
+
+                        const pred = data.prediction.class;
+                        document.getElementById('predictionResult').textContent = pred;
                         
-                        Object.entries(data.prediction.probabilities).forEach(([className, probability]) => {
-                            const percentage = (probability * 100).toFixed(1);
-                            const barDiv = document.createElement('div');
-                            barDiv.innerHTML = `
-                                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                                    <span>${className}</span>
-                                    <span>${percentage}%</span>
-                                </div>
-                                <div class="prob-bar">
-                                    <div class="prob-fill" style="width: ${percentage}%">
-                                        ${percentage}%
+                        const meta = speciesMeta[pred.toLowerCase()] || { icon: 'fa-question-circle', color: '#64748b' };
+                        const iconEl = document.getElementById('speciesIcon');
+                        iconEl.className = `fas ${meta.icon}`;
+                        iconEl.style.color = meta.color;
+                        document.getElementById('speciesIconContainer').style.borderColor = meta.color;
+                        document.getElementById('predictionResult').style.background = `linear-gradient(135deg, ${meta.color} 0%, #ec4899 100%)`;
+                        document.getElementById('predictionResult').style.webkitBackgroundClip = 'text';
+
+                        const confidenceEl = document.getElementById('confidence');
+                        if (data.prediction.confidence !== null && data.prediction.confidence !== undefined) {
+                            const conf = (data.prediction.confidence * 100).toFixed(1);
+                            confidenceEl.querySelector('span').textContent = `${conf}% Confidence`;
+                            confidenceEl.style.display = 'inline-flex';
+                        } else {
+                            confidenceEl.style.display = 'none';
+                        }
+
+                        // Small Feature Grid
+                        const grid = document.getElementById('featureValues');
+                        grid.innerHTML = features.map((f, i) => `
+                            <div class="feature-item-small">
+                                <span>${f.name}</span>
+                                <span>${inputs[i]} cm</span>
+                            </div>
+                        `).join('');
+
+                        const probContainer = document.getElementById('probContainer');
+                        const probDiv = document.getElementById('probabilityBars');
+                        if (data.prediction.probabilities) {
+                            probContainer.style.display = 'block';
+                            probDiv.innerHTML = Object.entries(data.prediction.probabilities).map(([name, prob]) => {
+                                const p = (prob * 100).toFixed(1);
+                                return `
+                                    <div class="prob-item">
+                                        <div class="prob-header">
+                                            <span>${name}</span>
+                                            <span>${p}%</span>
+                                        </div>
+                                        <div class="prob-bar">
+                                            <div class="prob-fill" style="width: ${p}%; background: ${speciesMeta[name.toLowerCase()]?.color || '#6366f1'}"></div>
+                                        </div>
                                     </div>
-                                </div>
-                            `;
-                            probBarsDiv.appendChild(barDiv);
-                        });
-                    }
-                } else {
-                    document.getElementById('predictionResult').textContent = 'Error';
-                    document.getElementById('confidence').textContent = data.error;
+                                `;
+                            }).join('');
+                        } else {
+                            probContainer.style.display = 'none';
+                            probDiv.innerHTML = '';
+                        }
+                    }, 600);
                 }
             } catch (error) {
-                document.getElementById('predictionResult').textContent = 'Error';
-                document.getElementById('confidence').textContent = 'Failed to connect to server';
                 console.error('Error:', error);
+                loader.classList.remove('active');
             }
         }
 
-        // Initialize on page load
-        window.onload = function() {
-            initializeInputs();
-        };
+        window.onload = initializeInputs;
     </script>
 </body>
 </html>
