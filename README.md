@@ -1,4 +1,3 @@
-```markdown
 # Iris Flower Classification 🌸
 
 [![Python 3.13](https://img.shields.io/badge/python-3.13-blue.svg)](https://www.python.org/downloads/)
@@ -17,7 +16,7 @@ A production-ready web application and REST API that serves a trained Iris flowe
 - **REST API** – JSON endpoints for single and batch predictions, model metadata, and health checks.
 - **High Accuracy** – SVM model with 96.7% accuracy, trained on the Iris dataset.
 - **Model Artifacts** – Pre-trained model, scaler, and label encoder included; easily retrain using the provided Jupyter notebook.
-- **Docker Support** – Containerize the app for consistent deployment.
+- **Docker Support** – Containerize the app for consistent deployment using Python 3.13.
 - **Production Ready** – Uses Gunicorn as WSGI server; ready for deployment on platforms like Heroku, Render, or AWS.
 
 ## Project Structure 📁
@@ -25,14 +24,14 @@ A production-ready web application and REST API that serves a trained Iris flowe
 ```
 .
 ├── app.py                          # Flask application with routes and prediction logic
-├── dockerfile                       # Docker configuration (update base image to Python 3.12+)
+├── dockerfile                       # Docker configuration (uses Python 3.13-slim)
 ├── requirements.txt                 # Python dependencies
 ├── iris-flower-classification.ipynb # Jupyter notebook for model training
 ├── Procfile                         # For Heroku deployment (Gunicorn)
 ├── README.md                        # This file
 ├── templates/
 │   └── index.html                   # Web UI template
-└── model_artifacts/                  # (Generated files – placed in root for simplicity)
+└── (Generated Model Files)
     ├── iris_classification_model_20251228_161424.pkl
     ├── scaler_20251228_161424.pkl
     ├── label_encoder_20251228_161424.pkl
@@ -53,7 +52,7 @@ The model was trained on the well-known [Iris dataset](https://archive.ics.uci.e
 
 ## Prerequisites 📋
 
-- Python **3.13** (or 3.11/3.12) – the dependencies are compatible with these versions.
+- Python **3.13** – the dependencies are specifically tested for this version.
 - pip (latest version recommended)
 - Docker (optional, for containerized deployment)
 
@@ -89,7 +88,7 @@ The model was trained on the well-known [Iris dataset](https://archive.ics.uci.e
 
 ### Docker
 
-The provided `dockerfile` uses `python:3.9-slim`; for best compatibility with the current dependencies, update the base image to `python:3.12-slim` or `python:3.13-slim`.
+The provided `dockerfile` uses `python:3.13-slim` for full compatibility with the project requirements.
 
 1. **Build the Docker image**
    ```bash
@@ -112,7 +111,7 @@ Visit `http://localhost:5000` in your browser. Use the form to input the four fe
 All endpoints return JSON responses.
 
 #### `GET /api/health`
-Health check to verify that the model is loaded.
+Health check to verify that the model is loaded and ready.
 ```bash
 curl http://localhost:5000/api/health
 ```
@@ -164,23 +163,6 @@ curl -X POST http://localhost:5000/batch_predict \
 }
 ```
 
-**Batch Prediction (Success)**
-```json
-{
-  "success": true,
-  "predictions": [
-    {
-      "sample_id": 0,
-      "prediction": "setosa",
-      "prediction_encoded": 0,
-      "features": { ... }
-    },
-    ...
-  ],
-  "count": 2
-}
-```
-
 ## Training the Model 🧠
 
 If you wish to retrain the model or experiment with different algorithms, use the Jupyter notebook:
@@ -193,11 +175,11 @@ The notebook:
 - Loads the Iris dataset from scikit-learn.
 - Splits data into training and test sets.
 - Scales features using `StandardScaler`.
-- Trains and evaluates multiple classifiers (Logistic Regression, Decision Tree, Random Forest, SVM, KNN, Gaussian NB, Gradient Boosting).
+- Trains and evaluates multiple classifiers.
 - Selects the best model based on accuracy.
-- Saves the model, scaler, label encoder, and a results summary with timestamps.
+- Saves the model, scaler, label encoder, and a results summary.
 
-**Note:** Update the filenames in `app.py` if you regenerate artifacts with new timestamps.
+**Note:** If you regenerate artifacts, ensure you update the filenames in `app.py` to match the new timestamps.
 
 ## Deployment ☁️
 
@@ -216,7 +198,7 @@ gunicorn --bind 0.0.0.0:5000 app:app
 ### Deploy to Heroku / Render / etc.
 
 1. Ensure the `Procfile` is present.
-2. Set the environment to Python 3.13 (or compatible) on the platform.
+2. Set the environment to Python 3.13 on the platform.
 3. Push the code; the platform will automatically install dependencies and start the web process.
 
 ## Technologies Used 🛠️
@@ -240,4 +222,3 @@ This project is licensed under the MIT License – see the [LICENSE](LICENSE) fi
 ---
 
 ⭐ If you find this project useful, please consider giving it a star on GitHub!
-```
