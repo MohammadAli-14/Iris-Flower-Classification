@@ -8,7 +8,7 @@
 
 A production-ready web application and REST API that serves a trained Iris flower classifier. The model (SVM) achieves **96.7% accuracy** on the classic Iris dataset. The app features a polished web interface for single predictions and supports batch predictions via JSON API.
 
-![Web UI Screenshot](https://via.placeholder.com/800x400?text=Iris+Classification+UI) <!-- Replace with actual screenshot -->
+![Web UI Screenshot](Iris.png)
 
 ## Features ✨
 
@@ -25,6 +25,7 @@ A production-ready web application and REST API that serves a trained Iris flowe
 .
 ├── app.py                          # Flask application with routes and prediction logic
 ├── dockerfile                       # Docker configuration (uses Python 3.13-slim)
+├── Iris.png                         # Web UI screenshot
 ├── requirements.txt                 # Python dependencies
 ├── iris-flower-classification.ipynb # Jupyter notebook for model training
 ├── Procfile                         # For Heroku deployment (Gunicorn)
