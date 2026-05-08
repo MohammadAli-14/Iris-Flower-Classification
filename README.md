@@ -13,7 +13,7 @@ A production-ready web application and REST API that serves a trained Iris flowe
 
 ![Web UI Screenshot](IRIS1.png)
 
-## Features ✨
+## Key Features ✨
 
 - **Interactive Web UI** – Enter sepal/petal measurements and get instant predictions with confidence scores.
 - **REST API** – JSON endpoints for single and batch predictions, model metadata, and health checks.
