@@ -9,7 +9,7 @@ joblib>=1.4
 # Optional (for additional functionality)
 python-dotenv>=1.0
 waitress>=2.1
-gunicorn>=22.0
+gunicorn==22.0.0
 
 # For development/debugging
 werkzeug>=3.0
